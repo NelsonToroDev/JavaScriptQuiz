@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
 import { Button } from '@mui/material'
-import { useQuestionsStore } from '../store/questions'
+import { useQuestionsStore } from '../store/questionsStore'
 
 const LIMIT_QUESTIONS = 10
 

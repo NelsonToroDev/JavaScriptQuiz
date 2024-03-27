@@ -3,7 +3,7 @@ import { Container, Stack, Typography } from '@mui/material'
 import './App.css'
 import { JavaScriptLogo } from './components/JavaScriptLogo'
 import { Start } from './components/Start'
-import { useQuestionsStore } from './store/questions'
+import { useQuestionsStore } from './store/questionsStore'
 import { Game } from './components/Game'
 
 function App () {
