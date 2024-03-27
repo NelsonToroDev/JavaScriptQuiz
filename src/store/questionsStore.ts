@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, devtools } from 'zustand/middleware'
 import { type Question } from '../types'
 import confetti from 'canvas-confetti'
+import { fetchAllQuestions } from '../services/questionsService'
 
 interface State {
   questions: Question[]
@@ -10,17 +14,29 @@ interface State {
   selectAnswer: ((questionId: number, answerIndex: number) => void)
   goNextQuestion: () => void
   goPreviousQuestion: () => void
+  reset: () => void
 }
 
-export const useQuestionsStore = create<State>()(persist((set, get) => {
+// middleware logger
+// const logger = (config) => (set, get, api) => {
+//   return config(
+//     (...args) => {
+//       console.log('previous state:', ...args)
+//       set(...args)
+//       console.log('new state:', ...args)
+//     },
+//     get,
+//     api
+//   )
+// }
+
+export const useQuestionsStore = create<State>()(devtools(persist((set, get) => {
   return {
     questions: [],
     currentQuestion: 0,
     fetchQuestions: async (limit: number): Promise<void> => {
-      const res = await fetch('http://localhost:5173/data.json')
-      const json = await res.json()
-      const questions = json.sort(() => Math.random() - 0.5).slice(0, limit)
-
+      const allQuestions = await fetchAllQuestions()
+      const questions = allQuestions.sort(() => Math.random() - 0.5).slice(0, limit)
       set({ questions })
     },
     selectAnswer: (questionId: number, answerIndex: number): void => {
@@ -57,9 +73,12 @@ export const useQuestionsStore = create<State>()(persist((set, get) => {
       if (previousQuestion >= 0) {
         set({ currentQuestion: previousQuestion })
       }
+    },
+    reset: (): void => {
+      set({ currentQuestion: 0, questions: [] })
     }
   }
 },
 {
   name: 'questions'
-}))
+})))
