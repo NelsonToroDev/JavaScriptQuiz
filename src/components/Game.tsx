@@ -5,6 +5,7 @@ import { useQuestionsStore } from '../store/questionsStore'
 import { type Question } from '../types'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { gradientDark } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import { Footer } from './Footer'
 
 // Function that will be create once that's why we keep it outside of the component
 const getBackgroundColor = (questionInfo: Question, index: number) => {
@@ -82,6 +83,7 @@ export const Game = () => {
 
       </Stack>
       <QuestionCard questionInfo={questionInfo} />
+      <Footer />
     </>
   )
 }
